@@ -46,18 +46,33 @@ class Window(object):
         pygame.draw.circle(self.surface, BLUE_COLOR_RGB,centerPoint, radius)
 
     def drawRewardAndPenaltySquares(self, board):
-        cellsWithRewards = board.getRewardCellsMap().keys()
-        cellsWithPenalties = board.getPenaltyCellsMap().keys()
+        cellsWithRewards = board.getRewardCellsMap()
+        cellsWithPenalties = board.getPenaltyCellsMap()
 
-        for c in cellsWithPenalties: self.colorCell(color=RED_COLOR_RGB, cell=c)
-        for c in cellsWithRewards: self.colorCell(color=GREEN_COLOR_RGB, cell=c)
+        # Color the cells
+        for c in cellsWithPenalties.keys(): self.colorCell(color=RED_COLOR_RGB, cell=c)
+        for c in cellsWithRewards.keys(): self.colorCell(color=GREEN_COLOR_RGB, cell=c)
 
-    def colorCell(self, cell, color, cellSize=WIDTH/NUM_ROWS):
+        # Print values on cells
+        for cell, value in cellsWithPenalties.items(): self.drawCellValue(cell, value)
+        for cell, value in cellsWithRewards.items(): self.drawCellValue(cell, value)
+
+
+    def drawCellValue(self, cell, value):
+        xCoord, yCoord = cell
+        font = pygame.font.SysFont(None, 32)
+        text = font.render(str(value), True, WHITE_COLOR_RGB)
+        # Weird text placement formatting. Theres probably a better way
+        self.surface.blit(text,
+            (xCoord * CELL_SIZE + 10, yCoord* CELL_SIZE + CELL_SIZE/2-10)
+            )
+
+    def colorCell(self, cell, color):
         xCoord, yCoord = cell
         pygame.draw.rect(
             self.surface,
             color,
-            (xCoord*cellSize+1,yCoord*cellSize+1, cellSize-2, cellSize-2)
+            (xCoord*CELL_SIZE+1,yCoord*CELL_SIZE+1, CELL_SIZE-2, CELL_SIZE-2)
             )
 
     def getsurfaceWidth(self):

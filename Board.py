@@ -10,7 +10,17 @@ class Board(object):
     def initCellRewards(self):
         for xPos in range(NUM_ROWS):
             for yPos in range(NUM_ROWS):
-                self.cellValues[(xPos, yPos)] = 50
+                self.cellValues[(xPos, yPos)] = 0
+
+    def createPenaltyCells(self):
+        for i in range(7):
+            self.cellValues[(5, i)] = -10
+        for i in range(8, 11):
+            self.cellValues[(5, i)] = -10
+
+        self.cellValues[0, 9] = 10
+        self.cellValues[9, 9] = 50
+
 
     def getCellRewards(self, player):
         return self.cellValues[player.currLocation]
@@ -22,7 +32,7 @@ class Board(object):
         return self.cellValues
 
     def getRewardCellsMap(self):
-        return dict(filter(lambda cellMap: cellMap[1] > 0, self.cellValues.items()))
+        return {cell: val for cell, val in self.cellValues.items() if val > 0}
 
     def getPenaltyCellsMap(self):
-        return dict(filter(lambda cellMap: cellMap[1] < 0, self.cellValues.items()))
+        return {cell: val for cell, val in self.cellValues.items() if val < 0}
