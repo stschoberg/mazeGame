@@ -5,18 +5,18 @@ class Player(object):
         self.currPos = pos
         self.score = 0
 
-    def moveDown(self):
+    def move(self, action):
         oldX, oldY = self.currPos
-        self.currPos = (oldX, oldY - 1)
-    def moveUp(self):
-        oldX, oldY = self.currPos
-        self.currPos = (oldX, oldY + 1)
-    def moveRight(self):
-        oldX, oldY = self.currPos
-        self.currPos = (oldX + 1, oldY)
-    def moveLeft(self):
-        oldX, oldY = self.currPos
-        self.currPos = (oldX - 1, oldY)
+        if action == 'left':
+            self.currPos = (oldX - 1, oldY)
+        elif action == 'right':
+            self.currPos = (oldX + 1, oldY)
+        elif action == 'up':
+            self.currPos = (oldX, oldY + 1)
+        elif action == 'down':
+            self.currPos = (oldX, oldY - 1)
+
+
 
     def updateCurrPos(self, newCoords):
         self.currPos = newCoords

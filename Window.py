@@ -13,7 +13,9 @@ class Window(object):
         self.drawRewardAndPenaltySquares(board)
         self.drawPlayer(player)
         pygame.display.update()
-
+    def updateSurface(self, player):
+        self.drawPlayer(player)
+        pygame.display.update()
     def fillSurfaceWithColor(self, color=BLACK_COLOR_RGB):
         self.surface.fill(color)
 
