@@ -1,23 +1,24 @@
 import pygame
-from functools import partial
 
 WHITE_COLOR_RGB = (255,255,255)
 BLACK_COLOR_RGB = (0,0,0)
 RED_COLOR_RGB = (255, 0, 0)
 GREEN_COLOR_RGB = (0, 255, 0)
+BLUE_COLOR_RGB = (0, 0, 255)
 WIDTH = 500
 NUM_ROWS = 10
+CELL_SIZE = WIDTH/NUM_ROWS
 
 class Window(object):
     def __init__(self, width=WIDTH):
         self.surface = pygame.display.set_mode((width, width))
         self.width_pxs = width
 
-    def drawSurface(self, board):
+    def drawSurface(self, board, player):
         self.fillSurfaceWithColor()
         self.drawGridLines()
         self.drawRewardAndPenaltySquares(board)
-        # Draw player
+        self.drawPlayer(player)
         pygame.display.update()
 
     def fillSurfaceWithColor(self, color=BLACK_COLOR_RGB):
@@ -35,20 +36,29 @@ class Window(object):
             pygame.draw.line(self.surface, lineColor, (xPos,0),(xPos,self.width_pxs))
             pygame.draw.line(self.surface, lineColor, (0,yPos),(self.width_pxs,yPos))
 
+    def drawPlayer(self, player):
+        playerCurrXCoord, playerCurrYCoord = player.getCurrCoords()
+        # Divisions need to be casted for pygame circle function
+        radius = int(CELL_SIZE/2)
+        centerPoint = (int(playerCurrXCoord*CELL_SIZE + CELL_SIZE/2),
+                        int(playerCurrYCoord*CELL_SIZE + CELL_SIZE/2))
+        # Player is a circle in a cell
+        pygame.draw.circle(self.surface, BLUE_COLOR_RGB,centerPoint, radius)
+
     def drawRewardAndPenaltySquares(self, board):
         cellsWithRewards = board.getRewardCellsMap().keys()
         cellsWithPenalties = board.getPenaltyCellsMap().keys()
 
-        [self.colorCell(color=RED_COLOR_RGB, cell=c) for c in cellsWithPenalties]
-        [self.colorCell(color=GREEN_COLOR_RGB, cell=c) for c in cellsWithRewards]
-
+        for c in cellsWithPenalties: self.colorCell(color=RED_COLOR_RGB, cell=c)
+        for c in cellsWithRewards: self.colorCell(color=GREEN_COLOR_RGB, cell=c)
 
     def colorCell(self, cell, color, cellSize=WIDTH/NUM_ROWS):
-        print("In this")
-        xCoord = cell[0]
-        yCoord = cell[1]
+        xCoord, yCoord = cell
         pygame.draw.rect(
-            self.surface, color,(xCoord*cellSize+1,yCoord*cellSize+1, cellSize-2, cellSize-2))
+            self.surface,
+            color,
+            (xCoord*cellSize+1,yCoord*cellSize+1, cellSize-2, cellSize-2)
+            )
 
     def getsurfaceWidth(self):
         return self.width_pxs
