@@ -7,6 +7,7 @@ Clone the repo.
 
 ```bash
 git clone https://github.com/stschoberg/mazeGame.git
+pip3 install pygame
 cd mazeGame
 python3 run.py
 ```
