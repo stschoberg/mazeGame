@@ -1,7 +1,7 @@
 from Board import Board
 from Window import Window
 from Player import Player
-from Constants import ACTIONS
+from Constants import ACTIONS, NUM_EPISODES, EPSILON
 import random
 import operator
 import copy
@@ -26,8 +26,10 @@ class QLearner(object):
 
     def learn(self):
         count = 0
-        for episode in range(10000):
+        for episode in range(NUM_EPISODES):
             self.currState = (0, 0)
+            count+=1
+            # print(count)
             while not self.board.isTerminalCell(self.currState):
                 action = self.epsilonGreedy(self.currState)
                 self.evalQFunction(self.currState, action)
@@ -39,7 +41,8 @@ class QLearner(object):
 
     def epsilonGreedy(self, state):
         randInt = random.randint(1,11)
-        if randInt <= 3:
+        if randInt <= EPSILON:
+
             validActions = list(filter(lambda action: self.board.isValidCell(state, action), ACTIONS))
             return random.choice(validActions)
 

@@ -1,4 +1,4 @@
-from Constants import NUM_ROWS
+from Constants import NUM_ROWS, CELL_VALUES, TERMINAL_CELLS
 
 class Board(object):
     cellValues = {} # Maps cell (x, y) to reward r
@@ -13,16 +13,11 @@ class Board(object):
                 self.cellValues[(xPos, yPos)] = 0
 
     def createPenaltyCells(self):
-        for i in range(3):
-            self.cellValues[(2, i)] = -10
-        for i in range(4, 6):
-            self.cellValues[(2, i)] = -10
-
-        self.cellValues[4, 0] = 30
-        self.cellValues[4, 4] = 50
+        for cell, val in CELL_VALUES:
+            self.cellValues[cell[0], cell[1]] = val
 
     def isTerminalCell(self, coord):
-        return self.cellValues[coord]
+        return coord in TERMINAL_CELLS
 
     def isValidCell(self, coord, action):
         xCoord, yCoord = self.getCellAfterAction(coord, action)

@@ -23,7 +23,7 @@ while True:
     dirToGo = {}
     for k, v in qTable.items():
         dirToGo[k] = max(v, key=v.get)
-    #     print("k: {}, v: {}".format(k,v))
+        print("k: {}, v: {}".format(k,v))
     #
     # print("____________________________________-")
     # for k, v in dirToGo.items():
